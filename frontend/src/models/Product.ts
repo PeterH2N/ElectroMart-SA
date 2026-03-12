@@ -4,15 +4,17 @@ export class Product {
     public title: string;
     public imageUrl: string;
     public basePrice: number;
-    public taxRate: number = 1.25;
-    public discountRate: number = 0.10;
+    public taxRate: number;
+    public discountRate: number;
     public productType: ProductType;
 
-    constructor(title: string, imageUrl: string, basePrice: number, productType: ProductType) {
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.basePrice = basePrice;
-        this.productType = productType;
+    constructor(product: Product) {
+        this.title = product.title;
+        this.imageUrl = product.imageUrl;
+        this.basePrice = product.basePrice;
+        this.taxRate = product.taxRate;
+        this.discountRate = product.discountRate;
+        this.productType = product.productType;
     }
 
     public getPrice(): number {

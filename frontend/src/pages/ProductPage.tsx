@@ -10,7 +10,7 @@ const Products = ({productType}: { productType: ProductType }) => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get<Product[]>(`http://localhost:3001/get-products-by-category?productType=${productType.toString()}`);
-                const products = response.data.map(item => new Product(item.title, item.imageUrl, item.basePrice, item.productType));
+                const products = response.data.map(item => new Product(item));
                 setProducts(products);
             } catch (error) {
                 console.error('Error fetching products:', error);

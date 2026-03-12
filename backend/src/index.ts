@@ -37,6 +37,25 @@ app.get("/unfinished-feature", (_: Request, res: Response) => {
   return res.status(500).send('Internal Server Error');
 });
 
+app.get("/set-product-discount", (req: Request, res: Response) => {
+  const title = req.query.productTitle;
+  const discount = req.query.discount;
+  console.log(req.query)
+  if (!title || !discount) {
+    return res.status(400).send('Wrong parameters');
+  }
+
+  const productIndex = recommendedProducts.findIndex((product) => product.title === title);
+  if (productIndex != -1) {
+    recommendedProducts[productIndex].discountRate = Number(discount);
+    return res.status(200).send(recommendedProducts[productIndex]);
+  }
+  else {
+    return res.status(400).send('No product found for the requested title');
+  }
+
+})
+
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
