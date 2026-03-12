@@ -4,6 +4,7 @@ import { recommendedProducts } from './dummyData';
 const app = express();
 const port = 3001;
 const cors = require('cors');
+let unfinishedFlag = false
 app.use(cors());
 
 app.use(express.json());
@@ -32,9 +33,23 @@ app.get("/get-products-by-category", (req: Request, res: Response) => {
   return res.json(products);
 });
 
+app.get("/set-unfinished-flag", (req: Request, res: Response) => {
+  let flag = req.query.flag;
+  if (typeof flag == 'string') {
+    unfinishedFlag = Boolean(flag);
+  }
+
+  return res.status(200).send(unfinishedFlag);
+})
+
 app.get("/unfinished-feature", (_: Request, res: Response) => {
-  // Oh no, this feature is not ready for production!
-  return res.status(500).send('Internal Server Error');
+  if (unfinishedFlag) {
+    // Oh no, this feature is not ready for production!
+    return res.status(501).send('Not Implemented');
+  }
+  else {
+    return res.status(404).send('Not Found');
+  }
 });
 
 app.get("/set-product-discount", (req: Request, res: Response) => {
