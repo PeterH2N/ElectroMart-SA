@@ -6,23 +6,30 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css'; // core Swiper
 import 'swiper/css/navigation'; // navigation module
 
+const sleep = (ms: number | undefined) => new Promise(r => setTimeout(r, ms));
 
 
 const Carousel = () => {
   const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchProducts = async (it: number) => {
       try {
         const response = await axios.get('http://localhost:3001/get-product-recommendations');
         setProducts(response.data);
       } catch (error) {
-        console.error('Error fetching products:', error);
-        setProducts([]);
+        if (it < 10) {
+          await sleep(100)
+          fetchProducts(it + 1)
+        }
+        else {
+          console.error('Error fetching products:', error);
+          setProducts([]);
+        }
       }
     };
 
-    fetchProducts();
+    fetchProducts(1);
   }, []);
 
   return (
